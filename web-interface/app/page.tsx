@@ -1,9 +1,56 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from "react";
+import { get, ref } from "firebase/database";
+import { database } from "@/lib/firebase";
+
+import { NitrogenLineChart } from "@/components/NitrogenLineChart";
+import type { ChartPoint } from "@/components/NitrogenLineChart";
+
 
 export default function Home() {
+  const [data, setData] = useState<ChartPoint[]>([]);
+  const [updateData, setUpdateData] = useState<number>(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (data.length > 15) {
+        setData((prev) => prev.slice(1)); // Remove the oldest data point if more than 20
+      }
+
+      setUpdateData((prev) => prev + 1);
+    }, 2000); // Update every 5 seconds
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
+  useEffect(() => {
+    const dataRef = ref(database, "soil");
+    get(dataRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        const fetchedData = snapshot.val();
+
+        const newPoint = {
+          timestamp: Date.now(),
+          nitrogen: fetchedData?.nitrogen || 0,
+          phosphorus: fetchedData?.phosphorus || 0,
+          potassium: fetchedData?.potassium || 0,
+        };
+
+        setData((prev) => [...prev, newPoint]);
+      } else {
+        console.log("No data available");
+      }
+    }).catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  }, [updateData]);
+
+
+  console.log("Fetched data:", data);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      
+    <div className="flex items-center justify-center min-h-screen w-full font-[family-name:var(--font-geist-sans)]">
+      <NitrogenLineChart data={data} />
     </div>
   );
 }
