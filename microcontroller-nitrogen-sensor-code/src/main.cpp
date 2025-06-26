@@ -197,7 +197,7 @@ void loop() {
     app.loop();
 
     unsigned long currentTime = millis();
-    if (currentTime - lastReadTime > 500) {
+    if (currentTime - lastReadTime > 2000) {
         lastReadTime = currentTime;
 
         writeRequest();
