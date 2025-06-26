@@ -79,7 +79,7 @@ export function NitrogenLineChart({ data }: { data: ChartPoint[] }) {
             />
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+              content={(props) => <ChartTooltipContent hideLabel {...props} />}
             />
             <Line
               dataKey="nitrogen"
