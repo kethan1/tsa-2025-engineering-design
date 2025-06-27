@@ -49,8 +49,10 @@ export default function Home() {
   }, [updateData]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full font-[family-name:var(--font-geist-sans)]">
+    <main className="px-[5%] gap-3 flex flex-col items-center justify-center min-h-screen w-full">
+      <h1 className="text-2xl lg:text-3xl font-bold">NitroSense</h1>
+      <h2 className="text-base md:text-lg">Intelligently Optimize Your Nitrogen Fertilizer Usage.</h2>
       <NitrogenLineChart data={data} />
-    </div>
+    </main>
   );
 }

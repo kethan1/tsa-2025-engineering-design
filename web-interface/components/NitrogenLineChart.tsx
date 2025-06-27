@@ -34,7 +34,7 @@ export type ChartPoint = {
 
 export function NitrogenLineChart({ data }: { data: ChartPoint[] }) {
   return (
-    <Card className="w-[60%]">
+    <Card className="w-full md:w-[60%]">
       <CardHeader>
         <CardTitle>Nitrogen Content</CardTitle>
         <CardDescription>
@@ -42,7 +42,7 @@ export function NitrogenLineChart({ data }: { data: ChartPoint[] }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer className="max-h-[100vh]" config={chartConfig}>
+        <ChartContainer className="max-h-[100vh] size-full" config={chartConfig}>
           <LineChart
             accessibilityLayer
             data={data}
