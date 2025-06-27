@@ -30,11 +30,11 @@ export type ChartPoint = {
   nitrogen: number;
   phosphorus: number;
   potassium: number;
-}
+};
 
 export function NitrogenLineChart({ data }: { data: ChartPoint[] }) {
   return (
-    <Card className="w-full md:w-[60%]">
+    <Card className="w-full md:w-[85%] lg:w-[60%]">
       <CardHeader>
         <CardTitle>Nitrogen Content</CardTitle>
         <CardDescription>
@@ -55,21 +55,27 @@ export function NitrogenLineChart({ data }: { data: ChartPoint[] }) {
           >
             <CartesianGrid vertical={false} />
             <XAxis
+              
+              padding={{ left: 12, right: 12 }}
+              height={80}
               tickCount={5}
               dataKey="timestamp"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              tickMargin={16}
+              angle={-30}
               tickFormatter={(value) => {
-                if (typeof value !== "number") {
-                  return value;
-                }
+                if (typeof value !== "number") return value;
                 const date = new Date(value);
-                const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
-                const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-                const seconds = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds();
-                return `${hours}:${minutes}:${seconds}`;
-            }}
+                let hours = date.getHours();
+                const minutes = date.getMinutes();
+                const seconds = date.getSeconds();
+                const ampm = hours >= 12 ? "PM" : "AM";
+                hours = hours % 12 || 12;
+                const m = minutes < 10 ? `0${minutes}` : minutes;
+                const s = seconds < 10 ? `0${seconds}` : seconds;
+                return `${hours}:${m}:${s} ${ampm}`;
+              }}
             />
             <YAxis
               tickLine={false}

@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${inter.className}`}
+        className={`dark ${inter.variable} ${inter.className}`}
       >
         {children}
       </body>
