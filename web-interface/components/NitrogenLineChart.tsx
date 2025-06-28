@@ -1,13 +1,13 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-
 import {
   Card,
-  CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
+  CardDescription,
+  CardContent,
 } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -15,73 +15,82 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
-export const description = "A line chart with dots";
+import { useSensor, SensorData } from "./SensorContext";
 
 const chartConfig = {
-  nitrogen: {
-    label: "Nitrogen",
-    color: "var(--chart-1)",
-  },
+  nitrogen: { label: "Nitrogen (mg/kg)", color: "var(--chart-1)" },
 } satisfies ChartConfig;
 
-export type ChartPoint = {
-  timestamp: number;
-  nitrogen: number;
-  phosphorus: number;
-  potassium: number;
-};
+type ChartPoint = SensorData;
 
-export function NitrogenLineChart({ data }: { data: ChartPoint[] }) {
+export function NitrogenLineChart() {
+  const { data: sensor, error } = useSensor();
+  const [series, setSeries] = useState<ChartPoint[]>([]);
+  const lastStamp = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!sensor) return;
+    const stamp = sensor.timestamp;
+    if (stamp !== lastStamp.current) {
+      setSeries((prev) => [...prev.slice(-15), sensor]);
+      lastStamp.current = stamp;
+    }
+  }, [sensor]);
+
+  if (error)
+    return (
+      <Card>
+        <CardContent className="text-red-500">Error: {error}</CardContent>
+      </Card>
+    );
+
+  if (!sensor && series.length === 0)
+    return (
+      <Card>
+        <CardContent>Loading sensor data…</CardContent>
+      </Card>
+    );
+
   return (
-    <Card className="w-full md:w-[85%] lg:w-[60%]">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Nitrogen Content</CardTitle>
-        <CardDescription>
-          Measured by using an ESP32 and NPK Sensor. Updates in Realtime.
-        </CardDescription>
+        <CardDescription>Real-time from Firebase.</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer className="max-h-[100vh] size-full" config={chartConfig}>
+        <ChartContainer
+          className="max-h-[100vh] size-full"
+          config={chartConfig}
+        >
           <LineChart
             accessibilityLayer
-            data={data}
-            margin={{
-              left: 12,
-              right: 24,
-              top: 12,
-              bottom: 12,
-            }}
+            data={series}
+            margin={{ left: 12, right: 24, top: 12, bottom: 12 }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              
+              dataKey="timestamp"
               padding={{ left: 12, right: 12 }}
               height={80}
               tickCount={5}
-              dataKey="timestamp"
               tickLine={false}
               axisLine={false}
               tickMargin={16}
               angle={-30}
               tickFormatter={(value) => {
-                if (typeof value !== "number") return value;
-                const date = new Date(value);
-                let hours = date.getHours();
-                const minutes = date.getMinutes();
-                const seconds = date.getSeconds();
-                const ampm = hours >= 12 ? "PM" : "AM";
-                hours = hours % 12 || 12;
-                const m = minutes < 10 ? `0${minutes}` : minutes;
-                const s = seconds < 10 ? `0${seconds}` : seconds;
-                return `${hours}:${m}:${s} ${ampm}`;
+                const date = new Date(Number(value));
+                const hours = date.getHours() % 12 || 12;
+                const minutes = String(date.getMinutes()).padStart(2, "0");
+                const seconds = String(date.getSeconds()).padStart(2, "0");
+                const ampm = date.getHours() >= 12 ? "PM" : "AM";
+                return `${hours}:${minutes}:${seconds} ${ampm}`;
               }}
             />
             <YAxis
               tickLine={false}
               axisLine={false}
               tickMargin={0}
-              tickFormatter={(value) => `${value} mg/kg`}
+              tickFormatter={(v) => `${v} mg/kg`}
             />
             <ChartTooltip
               cursor={false}
@@ -89,15 +98,11 @@ export function NitrogenLineChart({ data }: { data: ChartPoint[] }) {
             />
             <Line
               dataKey="nitrogen"
-              type="natural"
-              stroke="#98c5ff"
+              type="monotone"
+              stroke="var(--chart-1)"
               strokeWidth={2}
-              dot={{
-                fill: "#98c5ff",
-              }}
-              activeDot={{
-                r: 6,
-              }}
+              dot={{ fill: "var(--chart-1)" }}
+              activeDot={{ r: 6 }}
             />
           </LineChart>
         </ChartContainer>

@@ -76,7 +76,7 @@ export const WeatherProvider: React.FC<{ children: ReactNode }> = ({
     );
   }, []);
 
-  // Poll every 30 seconds
+  // Poll every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       if (navigator.geolocation) {

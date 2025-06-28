@@ -5,7 +5,7 @@ import { get, ref } from "firebase/database";
 import { database } from "@/lib/firebase";
 
 import { NitrogenLineChart } from "@/components/NitrogenLineChart";
-import type { ChartPoint } from "@/components/NitrogenLineChart";
+import type { ChartPoint } from "@/components/SensorContext";
 import { WeatherLineChart } from "@/components/WeatherLineChart";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -60,7 +60,7 @@ export default function Home() {
       <h2 className="text-base md:text-lg">
         Intelligently Optimize Your Nitrogen Fertilizer Usage.
       </h2>
-      <Tabs defaultValue="nitrogen-line-chart" className="w-full">
+      <Tabs defaultValue="nitrogen-line-chart" className="w-full md:w-[85%] lg:w-[60%]">
         <TabsList>
           <TabsTrigger value="nitrogen-line-chart">
             Nitrogen Line Chart

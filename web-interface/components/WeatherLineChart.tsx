@@ -68,7 +68,7 @@ export function WeatherLineChart() {
     );
 
   return (
-    <Card className="w-full md:w-[85%] lg:w-[60%]">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Weather Trend</CardTitle>
         <CardDescription>

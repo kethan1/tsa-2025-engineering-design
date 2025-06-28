@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import { WeatherProvider } from "@/components/WeatherContext";
+import { SensorProvider } from "@/components/SensorContext";
 import "./globals.css";
 
 const inter = Inter({
@@ -25,7 +26,9 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="NitroSense" />
       </head>
       <body className={`dark ${inter.variable} ${inter.className}`}>
-        <WeatherProvider>{children}</WeatherProvider>
+        <WeatherProvider>
+          <SensorProvider>{children}</SensorProvider>
+        </WeatherProvider>
       </body>
     </html>
   );
