@@ -5,6 +5,7 @@ import { get, ref } from "firebase/database";
 import { database } from "@/lib/firebase";
 
 import { NitrogenLineChart } from "@/components/NitrogenLineChart";
+import { WeatherWidget, WeatherLineChart } from "@/components/WeatherLineChart";
 import type { ChartPoint } from "@/components/NitrogenLineChart";
 
 const DATA_FETCH_INTERVAL_S = 2;
@@ -14,7 +15,10 @@ export default function Home() {
   const [updateData, setUpdateData] = useState<number>(0);
 
   useEffect(() => {
-    const interval = setInterval(() => setUpdateData((prev) => prev + 1), DATA_FETCH_INTERVAL_S * 1000);
+    const interval = setInterval(
+      () => setUpdateData((prev) => prev + 1),
+      DATA_FETCH_INTERVAL_S * 1000
+    );
     return () => clearInterval(interval);
   }, []);
 
@@ -51,8 +55,11 @@ export default function Home() {
   return (
     <main className="px-[5%] gap-3 flex flex-col items-center justify-center min-h-screen w-full">
       <h1 className="text-2xl lg:text-3xl font-bold">NitroSense</h1>
-      <h2 className="text-base md:text-lg">Intelligently Optimize Your Nitrogen Fertilizer Usage.</h2>
+      <h2 className="text-base md:text-lg">
+        Intelligently Optimize Your Nitrogen Fertilizer Usage.
+      </h2>
       <NitrogenLineChart data={data} />
+      <WeatherLineChart />
     </main>
   );
 }

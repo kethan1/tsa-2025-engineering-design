@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
+
+import { WeatherProvider } from "@/components/WeatherContext";
 import "./globals.css";
 
 const inter = Inter({
@@ -19,10 +21,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`dark ${inter.variable} ${inter.className}`}
-      >
-        {children}
+      <body className={`dark ${inter.variable} ${inter.className}`}>
+        <WeatherProvider>{children}</WeatherProvider>
       </body>
     </html>
   );
