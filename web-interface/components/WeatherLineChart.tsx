@@ -1,9 +1,13 @@
-/* -----------------------------------------------------------------------------
- * WeatherWidget – compact single‑reading card (matches Nitrogen card styling)
- * -------------------------------------------------------------------------- */
 "use client";
 
-import { useWeather } from "./WeatherContext";
+import { useEffect, useRef, useState } from "react";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 import {
   Card,
   CardHeader,
@@ -12,63 +16,12 @@ import {
   CardContent,
 } from "@/components/ui/card";
 
-export const WeatherWidget: React.FC = () => {
-  const { data: weather, error } = useWeather();
-
-  if (error)
-    return (
-      <Card>
-        <CardContent className="text-red-500">Error: {error}</CardContent>
-      </Card>
-    );
-
-  if (!weather)
-    return (
-      <Card>
-        <CardContent>Loading weather&hellip;</CardContent>
-      </Card>
-    );
-
-  return (
-    <Card className="w-full md:w-[85%] lg:w-[60%]">
-      <CardHeader>
-        <CardTitle>Current Weather</CardTitle>
-        <CardDescription>Live reading from your station</CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-2 text-center">
-        <p className="text-2xl">
-          🌡 <span className="font-semibold">{weather.temperature.toFixed(1)}</span> °C
-        </p>
-        <p className="text-2xl">
-          💧 <span className="font-semibold">{weather.precipitation.toFixed(1)}</span> mm
-        </p>
-      </CardContent>
-    </Card>
-  );
-};
-
-/* -----------------------------------------------------------------------------
- * WeatherLineChart – auto‑refreshing line chart (Nitrogen‑style styling)
- * -------------------------------------------------------------------------- */
-import { useEffect, useRef, useState } from "react";
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  XAxis,
-  YAxis,
-} from "recharts";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
-} from "@/components/ui/chart";
+import { useWeather } from "./WeatherContext";
 
 interface ChartPoint {
-  timestamp: number;      // epoch ms
-  temperature: number;    // °C
-  precipitation: number;  // mm
+  timestamp: number; // epoch ms
+  temperature: number; // °C
+  precipitation: number; // mm
 }
 
 const chartConfig = {
@@ -118,11 +71,16 @@ export function WeatherLineChart() {
     <Card className="w-full md:w-[85%] lg:w-[60%]">
       <CardHeader>
         <CardTitle>Weather Trend</CardTitle>
-        <CardDescription>Automatically pulled from OpenWeatherAPI.</CardDescription>
+        <CardDescription>
+          Automatically pulled from OpenWeatherAPI.
+        </CardDescription>
       </CardHeader>
 
       <CardContent>
-        <ChartContainer className="max-h-[100vh] size-full" config={chartConfig}>
+        <ChartContainer
+          className="max-h-[100vh] size-full"
+          config={chartConfig}
+        >
           <LineChart
             accessibilityLayer
             data={series}

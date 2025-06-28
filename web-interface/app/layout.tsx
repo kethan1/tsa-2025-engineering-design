@@ -21,6 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="apple-mobile-web-app-title" content="NitroSense" />
+      </head>
       <body className={`dark ${inter.variable} ${inter.className}`}>
         <WeatherProvider>{children}</WeatherProvider>
       </body>

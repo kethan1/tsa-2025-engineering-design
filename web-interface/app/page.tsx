@@ -5,8 +5,10 @@ import { get, ref } from "firebase/database";
 import { database } from "@/lib/firebase";
 
 import { NitrogenLineChart } from "@/components/NitrogenLineChart";
-import { WeatherWidget, WeatherLineChart } from "@/components/WeatherLineChart";
 import type { ChartPoint } from "@/components/NitrogenLineChart";
+import { WeatherLineChart } from "@/components/WeatherLineChart";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const DATA_FETCH_INTERVAL_S = 2;
 
@@ -53,13 +55,35 @@ export default function Home() {
   }, [updateData]);
 
   return (
-    <main className="px-[5%] gap-3 flex flex-col items-center justify-center min-h-screen w-full">
+    <main className="px-[5%] py-5 gap-3 flex flex-col items-center justify-center min-h-screen w-full">
       <h1 className="text-2xl lg:text-3xl font-bold">NitroSense</h1>
       <h2 className="text-base md:text-lg">
         Intelligently Optimize Your Nitrogen Fertilizer Usage.
       </h2>
-      <NitrogenLineChart data={data} />
-      <WeatherLineChart />
+      <Tabs defaultValue="nitrogen-line-chart" className="w-full">
+        <TabsList>
+          <TabsTrigger value="nitrogen-line-chart">
+            Nitrogen Line Chart
+          </TabsTrigger>
+          <TabsTrigger value="weather-line-chart">
+            Weather Line Chart
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent
+          forceMount
+          value="nitrogen-line-chart"
+          className="data-[state=inactive]:hidden"
+        >
+          <NitrogenLineChart data={data} />
+        </TabsContent>
+        <TabsContent
+          forceMount
+          value="weather-line-chart"
+          className="data-[state=inactive]:hidden"
+        >
+          <WeatherLineChart />
+        </TabsContent>
+      </Tabs>
     </main>
   );
 }
