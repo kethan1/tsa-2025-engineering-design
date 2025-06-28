@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Rubik } from "next/font/google";
 
 import { WeatherProvider } from "@/components/WeatherContext";
 import { SensorProvider } from "@/components/SensorContext";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const rubik = Rubik({
+  variable: "--font-rubik",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -25,7 +26,7 @@ export default function RootLayout({
       <head>
         <meta name="apple-mobile-web-app-title" content="NitroSense" />
       </head>
-      <body className={`dark ${inter.variable} ${inter.className}`}>
+      <body className={`dark ${rubik.variable} ${rubik.className}`}>
         <WeatherProvider>
           <SensorProvider>{children}</SensorProvider>
         </WeatherProvider>

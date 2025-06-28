@@ -52,6 +52,7 @@ export const WeatherProvider: React.FC<{ children: ReactNode }> = ({
         precipitation: precip,
       });
       setError(null);
+      /* eslint-disable  @typescript-eslint/no-explicit-any */
     } catch (err: any) {
       setError(err.message);
     }

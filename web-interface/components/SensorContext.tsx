@@ -47,6 +47,7 @@ export const SensorProvider: React.FC<{ children: ReactNode }> = ({
         potassium: val.potassium ?? 0,
       });
       setError(null);
+      /* eslint-disable  @typescript-eslint/no-explicit-any */
     } catch (err: any) {
       setError(err.message);
     }
